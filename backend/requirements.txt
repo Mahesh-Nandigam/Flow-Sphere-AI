@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+websockets
+pydantic
+google-generativeai
+pytest
+httpx
