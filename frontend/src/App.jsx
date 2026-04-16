@@ -13,7 +13,7 @@ function App() {
 
   // Real WebSocket connection to FastAPI
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8000/ws');
+    const ws = new WebSocket('wss://flowsphere-backend-633685174528.us-central1.run.app/ws');
     
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);

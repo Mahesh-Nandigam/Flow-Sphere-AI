@@ -7,9 +7,9 @@ app = FastAPI(title="FlowSphere OS API", description="Operating System for Physi
 # Security: Restrict CORS strictly to the React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
