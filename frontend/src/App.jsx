@@ -11,20 +11,58 @@ function App() {
     logs: []
   });
 
-  // Real WebSocket connection to FastAPI
+  // Dynamic real-time connection to backend (WebSocket with polling fallback)
   useEffect(() => {
-    const ws = new WebSocket('wss://flowsphere-backend-633685174528.us-central1.run.app/ws');
-    
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setSimulationData(data);
-    };
+    let isSubscribed = true;
+    let pollInterval = null;
 
-    ws.onclose = () => {
-      console.log('WebSocket Disconnected');
-    };
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/api/ws`;
 
-    return () => ws.close();
+    let ws;
+    try {
+      ws = new WebSocket(wsUrl);
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (isSubscribed) setSimulationData(data);
+        } catch (e) {
+          console.error('Error parsing simulation data', e);
+        }
+      };
+
+      ws.onerror = () => {
+        startPolling();
+      };
+
+      ws.onclose = () => {
+        startPolling();
+      };
+    } catch (e) {
+      startPolling();
+    }
+
+    function startPolling() {
+      if (pollInterval || !isSubscribed) return;
+      pollInterval = setInterval(async () => {
+        try {
+          const res = await fetch('/api/state');
+          if (res.ok) {
+            const data = await res.json();
+            if (isSubscribed) setSimulationData(data);
+          }
+        } catch (err) {
+          // ignore transient poll errors
+        }
+      }, 500);
+    }
+
+    return () => {
+      isSubscribed = false;
+      if (ws) ws.close();
+      if (pollInterval) clearInterval(pollInterval);
+    };
   }, []);
 
   return (
