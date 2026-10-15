@@ -1,3 +1,11 @@
+# FlowSphere AI — Adaptive Crowd & Infrastructure Operating System
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-brightgreen?style=for-the-badge&logo=vercel)](https://flow-sphere-ai-ashen.vercel.app)
+
+**🔗 Live Production URL:** [https://flow-sphere-ai-ashen.vercel.app](https://flow-sphere-ai-ashen.vercel.app)
+
+---
+
 <div align="center">
   <h1>🌌 FlowSphere OS</h1>
   <p><strong>The Operating System for Physical Spaces</strong></p>
